@@ -10,6 +10,20 @@ class GenerateDocsConsole extends Command
 {
 
     /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'path2api:generate';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Generate file with description of every route which URL\'s begin api/*. It based on PHPDoc of callback method.';
+
+    /**
      * An array of all the registered routes.
      *
      * @var \Illuminate\Routing\RouteCollection
@@ -66,7 +80,7 @@ class GenerateDocsConsole extends Command
      */
     protected function getRoutes()
     {
-        $results = array();
+        $results = [];
 
         foreach ($this->routes as $route) {
             $results[] = $this->getRouteInformation($route);
