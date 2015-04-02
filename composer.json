@@ -1,0 +1,25 @@
+{
+    "name": "pomek/path2api",
+    "description": "",
+    "authors": [
+        {
+            "name": "Kamil Piechaczek",
+            "email": "github@pomek.pl"
+        }
+    ],
+    "require-dev": {
+        "phpspec/phpspec": "~2.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pomek\\": "src"
+        }
+    },
+    "require": {
+        "illuminate/support": "~5.0",
+        "illuminate/console": "~5.0"
+    }
+}
