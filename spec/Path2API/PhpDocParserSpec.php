@@ -112,6 +112,82 @@ DOCBLOCK;
         $this->getDescription()->shouldReturn("");
     }
 
+    function it_should_return_params_with_types_hinting(ReflectionMethodInterface $reflection)
+    {
+        $docblock = <<<DOCBLOCK
+/**
+ * @param int \$userId
+ * @param int \$categoryId
+ * @param string \$word
+ */
+DOCBLOCK;
+
+        $reflection->getDocComment()->willReturn($docblock);
+
+        $this->getParams()->shouldReturn([
+            '$userId' => [
+                'int'
+            ],
+            '$categoryId' => [
+                'int'
+            ],
+            '$word' => [
+                'string'
+            ],
+        ]);
+    }
+
+    function it_should_return_params_without_types_hinting(ReflectionMethodInterface $reflection)
+    {
+        $docblock = <<<DOCBLOCK
+/**
+ * @param \$userId
+ * @param \$categoryId
+ * @param \$word
+ */
+DOCBLOCK;
+
+        $reflection->getDocComment()->willReturn($docblock);
+
+        $this->getParams()->shouldReturn([
+            '$userId' => [
+                'mixed'
+            ],
+            '$categoryId' => [
+                'mixed'
+            ],
+            '$word' => [
+                'mixed'
+            ],
+        ]);
+    }
+
+    function it_should_return_params_with_object_types_hinting(ReflectionMethodInterface $reflection)
+    {
+        $docblock = <<<DOCBLOCK
+/**
+ * @param stdClass \$userId
+ * @param Integer | Float \$categoryId
+ * @param Collection \$word
+ */
+DOCBLOCK;
+
+        $reflection->getDocComment()->willReturn($docblock);
+
+        $this->getParams()->shouldReturn([
+            '$userId' => [
+                'stdClass'
+            ],
+            '$categoryId' => [
+                'Integer',
+                'Float'
+            ],
+            '$word' => [
+                'Collection'
+            ],
+        ]);
+    }
+
     function it_should_return_parsed_php_doc_elements(ReflectionMethodInterface $reflection)
     {
         $docblock = <<<DOCBLOCK
@@ -140,6 +216,18 @@ DOCBLOCK;
             "Be careful: I have more lines!",
             "@see: http://php.net",
         ]));
+
+        $this->getParams()->shouldReturn([
+            '$userId' => [
+                'int'
+            ],
+            '$categoryId' => [
+                'int'
+            ],
+            '$word' => [
+                'string'
+            ],
+        ]);
 
         $this->getThrows()->shouldReturn([
             '\InvalidArgumentException',

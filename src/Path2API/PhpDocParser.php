@@ -37,9 +37,9 @@ class PhpDocParser
     }
 
     /**
-     * Return description of method.
+     * Returns description of method.
      *
-     * @return null|string
+     * @return string
      */
     public function getDescription()
     {
@@ -62,5 +62,60 @@ class PhpDocParser
         return trim(join("\n", $lines_docs));
     }
 
+    /**
+     * Returns an array with parsed params.
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        $lines_docs = array_filter($this->getParsedDocs(), function($item) {
+           return preg_match('/^@param/i', $item);
+        });
+
+        $params = [];
+
+        $lines_docs = array_map(function ($item) {
+            return preg_replace('/^@param (.*)/i', '$1', $item);
+        }, $lines_docs);
+
+        foreach ($lines_docs as $item) {
+            $matches = [];
+
+            if (!preg_match('/(.*)\ ?(\$.*)$/i', $item, $matches)) {
+                continue;
+            }
+
+            if (empty($matches[1])) {
+                $matches[1] = "mixed";
+            }
+
+            $params[$matches[2]] = array_map(function ($row) {
+                return trim($row);
+            }, explode('|', $matches[1]));
+        }
+
+        return $params;
+    }
+
+    /**
+     * Returns an array with parsed lines from PHPDoc.
+     *
+     * @return array
+     */
+    protected function getParsedDocs()
+    {
+        $lines_docs = explode("\n", $this->reflection->getDocComment());
+
+        // Remove first line (/**)
+        array_shift($lines_docs);
+
+        // Remove last line (*/)
+        array_pop($lines_docs);
+
+        return array_map(function ($item) {
+            return ltrim($item, '* ');
+        }, $lines_docs);
+    }
 
 }
