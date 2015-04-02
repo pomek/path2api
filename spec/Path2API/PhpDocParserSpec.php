@@ -6,8 +6,6 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Pomek\Path2API\Contract\ReflectionMethodInterface;
 
-;
-
 class PhpDocParserSpec extends ObjectBehavior
 {
     function let(ReflectionMethodInterface $reflection)
