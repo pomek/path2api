@@ -3,6 +3,7 @@
 namespace Pomek\Path2API;
 
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Console\Command;
@@ -38,17 +39,24 @@ class GenerateDocsConsole extends Command
     protected $config;
 
     /**
+     * @var \Illuminate\Filesystem\Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * Create a new route command instance.
      *
      * @param \Illuminate\Routing\Router $router
      * @param \Illuminate\Contracts\Config\Repository $config
+     * @param \Illuminate\Filesystem\Filesystem $filesystem
      */
-    public function __construct(Router $router, ConfigRepository $config)
+    public function __construct(Router $router, ConfigRepository $config, Filesystem $filesystem)
     {
         parent::__construct();
 
         $this->routes = $router->getRoutes();
         $this->config = $config->get('path2api');
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -63,16 +71,20 @@ class GenerateDocsConsole extends Command
             return;
         }
 
-        $file_content = [
+        $file_contents = [
             $this->config['before'],
         ];
 
+        foreach ($this->getRoutes() as $route) {
+            $route = $this->parseRoute($route);
+            $template = $this->config['template'];
 
-        $file_content = [
-            $this->config['after']
-        ];
+            $file_contents[] = $template($route['uri'], $route['description'], $route['params'], $route['throws']);
+        }
 
-        // todo: save to file
+        $file_contents[] = $this->config['after'];
+
+        $this->filesystem->put($this->config['file'], join("\n", $file_contents));
     }
 
     /**

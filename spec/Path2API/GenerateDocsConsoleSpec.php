@@ -4,16 +4,21 @@ namespace spec\Pomek\Path2API;
 
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Router;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class GenerateDocsConsoleSpec extends ObjectBehavior
 {
+    protected $tempFile;
 
-    function let(Repository $config)
+    function let(Repository $config, Filesystem $fs)
     {
-        $config->get('path2api')->willReturn(include __DIR__ . '/../../src/config/path2api.php');
+        $config_file = include __DIR__ . '/../../src/config/path2api.php';
+        $this->tempFile = $config_file['file'];
+
+        $config->get('path2api')->willReturn($config_file);
         $router = new Router(new Dispatcher);
 
         $router->get('/api', ['uses' => 'Stubs\Pomek\Path2API\Controller@homepage']);
@@ -22,7 +27,7 @@ class GenerateDocsConsoleSpec extends ObjectBehavior
             return $id;
         });
 
-        $this->beConstructedWith($router, $config);
+        $this->beConstructedWith($router, $config, $fs);
     }
 
     function it_is_initializable()
@@ -69,7 +74,16 @@ class GenerateDocsConsoleSpec extends ObjectBehavior
         ]);
     }
 
-    function getMatchers() {
+    function it_should_generate_file(Filesystem $fs)
+    {
+        $expected_content = file_get_contents(__DIR__ . '/../../stubs/api.md');
+        $fs->put($this->tempFile, $expected_content)->shouldBeCalled();
+
+        $this->fire();
+    }
+
+    function getMatchers()
+    {
         return [
             'returnDocs' => function (array $values, array $expect) {
                 $numbers = count($values);

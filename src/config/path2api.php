@@ -11,55 +11,57 @@ return [
     /**
      * File name of the generated documentation.
      */
-    'filename' => 'api.md',
+    'file' => 'api.md',
 
 
     /**
      * Text will be append before docs.
      */
-    'before' => '# API Documentation',
+    'before' => join("\n", [
+        '# API Documentation' . "\n",
+        'Documentation generates by **Path2API** package.' . "\n",
+        '---' . "\n",
+    ]),
 
 
     /**
      * Text will be append after docs.
      */
-    'after' => 'Generates by [Path2API](//github.com/pomek/path2api)',
+    'after' => join("\n", [
+        '---' . "\n",
+        'Generates by [Path2API](//github.com/pomek/path2api)',
+    ]),
 
 
     /**
      * Template for a single route.
      */
-    'template' => function ($uri, $description, array $throws, array $params) {
+    'template' => function ($uri, $description, array $params, array $throws) {
         $response = [
-            sprintf('### %s', $uri),
+            sprintf('### URL: %s' . "\n", $uri),
         ];
 
         if (null !== $description) {
             $response[] = $description;
-            $response[] = '';
-        }
-
-        if (0 !== count($throws)) {
-            $response[] = '**Throws:**';
-
-            $response[] = join("\n", array_map(function ($item) {
-                return sprintf(' * `%s`', $item);
-            }, $throws));
-
-            $response[] = '';
         }
 
         if (0 !== count($params)) {
-            $response[] = '**Params:**';
+            $response[] = "\n" . '**Params:**';
 
             foreach ($params as $param_name => $param_types) {
                 $response[] = sprintf(' * `%s` `%s`', $param_name, join(',', $param_types));
             }
-
-            $response[] = '';
         }
 
-        $response[] = '---';
+        if (0 !== count($throws)) {
+            $response[] = "\n" . '**Throws:**';
+
+            $response[] = join("\n", array_map(function ($item) {
+                return sprintf(' * `%s`', $item);
+            }, $throws));
+        }
+
+        $response[] = "\n";
 
         return join("\n", $response);
     },
