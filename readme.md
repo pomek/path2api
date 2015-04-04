@@ -10,7 +10,7 @@ Package is compatible with Laravel 5.
 
 ## Installation
 
-1. Add package to composer: `composer require "pomek/path2api:1.0.*"
+1. Add package to composer: `composer require "pomek/path2api:1.0.*"`
 2. Publish configuration: `php artisan vendor:publish`
 3. Edit configuration file: `config/path2api.php`
 4. Add Service Provider to `app.php`: `'Pomek\Path2API\Path2ApiServiceProvider'`
