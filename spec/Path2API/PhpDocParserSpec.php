@@ -113,9 +113,9 @@ DOCBLOCK;
     {
         $docblock = <<<DOCBLOCK
 /**
- * @param int \$userId
- * @param int \$categoryId
- * @param string \$word
+ * @param  int    \$userId
+ * @param  int    \$categoryId
+ * @param  string \$word
  */
 DOCBLOCK;
 
@@ -231,4 +231,34 @@ DOCBLOCK;
             '\LogicException',
         ]);
     }
+
+    function it_should_return_parsed_php_doc_elements_second_test(\ReflectionMethod $reflection)
+    {
+        $docblock = <<<DOCBLOCK
+/**
+ * Handle calls to missing methods on the controller.
+ *
+ * @param  array   \$parameters
+ * @return mixed
+ *
+ * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+ */
+DOCBLOCK;
+
+        $reflection->getDocComment()->willReturn($docblock);
+
+        $this->getDescription()->shouldReturn('Handle calls to missing methods on the controller.');
+
+        $this->getParams()->shouldReturn([
+            '$parameters' => [
+                'array'
+            ],
+        ]);
+
+        $this->getThrows()->shouldReturn([
+            '\Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+        ]);
+    }
+
+
 }

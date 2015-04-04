@@ -2,6 +2,8 @@
 
 namespace Pomek\Path2API;
 
+use Illuminate\Filesystem\Filesystem;
+
 class Path2ApiServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function boot()
@@ -19,7 +21,7 @@ class Path2ApiServiceProvider extends \Illuminate\Support\ServiceProvider
     protected function registerCommands()
     {
         $this->app->bindIf('command.path2api', function () {
-            return new GenerateDocsConsole($this->app['router'], $this->app['config'], $this->app['filesystem']);
+            return new GenerateDocsConsole($this->app['router'], $this->app['config'], new Filesystem);
         });
 
         $this->commands([
