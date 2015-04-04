@@ -49,7 +49,7 @@ return [
             $response[] = "\n" . '**Params:**';
 
             foreach ($params as $param_name => $param_types) {
-                $response[] = sprintf(' * `%s` `%s`', $param_name, join(',', $param_types));
+                $response[] = sprintf(' * `%s` `%s`', join(',', $param_types), $param_name);
             }
         }
 

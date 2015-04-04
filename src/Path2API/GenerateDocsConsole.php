@@ -7,6 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateDocsConsole extends Command
 {
@@ -22,7 +23,7 @@ class GenerateDocsConsole extends Command
      *
      * @var string
      */
-    protected $description = 'Generate file with description of every route which URL\'s begin api/*. It based on PHPDoc of callback methods.';
+    protected $description = 'Generates documentation to API based on phpdoc comments in controllers classes.';
 
     /**
      * An array of all the registered routes.
@@ -60,6 +61,17 @@ class GenerateDocsConsole extends Command
     }
 
     /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return self
+     */
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    /**
      * Execute the console command.
      *
      * @return void
@@ -71,7 +83,7 @@ class GenerateDocsConsole extends Command
             return;
         }
 
-        $file_contents = [
+        $content = [
             $this->config['before'],
         ];
 
@@ -79,12 +91,13 @@ class GenerateDocsConsole extends Command
             $route = $this->parseRoute($route);
             $template = $this->config['template'];
 
-            $file_contents[] = $template($route['uri'], $route['description'], $route['params'], $route['throws']);
+            $content[] = $template($route['uri'], $route['description'], $route['params'], $route['throws']);
         }
 
-        $file_contents[] = $this->config['after'];
+        $content[] = $this->config['after'];
 
-        $this->filesystem->put($this->config['file'], join("\n", $file_contents));
+        $this->filesystem->put($this->config['file'], join("\n", $content));
+        $this->info(sprintf('File %s was generated.', $this->config['file']));
     }
 
     /**

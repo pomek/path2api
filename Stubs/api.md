@@ -15,7 +15,7 @@ Sending email message to given email address.
 @see: mail() function
 
 **Params:**
- * `$email` `string`
+ * `string` `$email`
 
 **Throws:**
  * `\InvalidArgumentException`

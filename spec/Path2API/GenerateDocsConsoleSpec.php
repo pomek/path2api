@@ -8,12 +8,13 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Router;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateDocsConsoleSpec extends ObjectBehavior
 {
     protected $tempFile;
 
-    function let(Repository $config, Filesystem $fs)
+    function let(Repository $config, Filesystem $fs, OutputInterface $output)
     {
         $config_file = include __DIR__ . '/../../src/config/path2api.php';
         $this->tempFile = $config_file['file'];
@@ -28,6 +29,7 @@ class GenerateDocsConsoleSpec extends ObjectBehavior
         });
 
         $this->beConstructedWith($router, $config, $fs);
+        $this->setOutput($output);
     }
 
     function it_is_initializable()
