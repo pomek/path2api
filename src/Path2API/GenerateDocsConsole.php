@@ -2,13 +2,13 @@
 
 namespace Pomek\Path2API;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Console\Command;
 
 class GenerateDocsConsole extends Command
 {
-
     /**
      * The console command name.
      *
@@ -21,7 +21,7 @@ class GenerateDocsConsole extends Command
      *
      * @var string
      */
-    protected $description = 'Generate file with description of every route which URL\'s begin api/*. It based on PHPDoc of callback method.';
+    protected $description = 'Generate file with description of every route which URL\'s begin api/*. It based on PHPDoc of callback methods.';
 
     /**
      * An array of all the registered routes.
@@ -31,15 +31,24 @@ class GenerateDocsConsole extends Command
     protected $routes;
 
     /**
+     * An array of package configuration.
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
      * Create a new route command instance.
      *
      * @param \Illuminate\Routing\Router $router
+     * @param \Illuminate\Contracts\Config\Repository $config
      */
-    public function __construct(Router $router)
+    public function __construct(Router $router, ConfigRepository $config)
     {
         parent::__construct();
 
         $this->routes = $router->getRoutes();
+        $this->config = $config->get('path2api');
     }
 
     /**
@@ -54,9 +63,23 @@ class GenerateDocsConsole extends Command
             return;
         }
 
+        $file_content = [
+            $this->config['before'],
+        ];
 
+
+        $file_content = [
+            $this->config['after']
+        ];
+
+        // todo: save to file
     }
 
+    /**
+     * Returns an array with attached documentation for every route.
+     *
+     * @return array
+     */
     public function getRoutesWithDocs()
     {
         $results = [];
@@ -68,16 +91,27 @@ class GenerateDocsConsole extends Command
         return $results;
     }
 
+    /**
+     * Returns parsed route - attach documentation to route.
+     * It doesn't work with inline Closures.
+     *
+     * @param array $route
+     * @return array
+     */
     protected function parseRoute(array $route)
     {
+        $build_array = function ($descprition, array $throws, array $params) use (&$route) {
+            return array_merge($route, [
+                'description' => $descprition,
+                'throws' => $throws,
+                'params' => $params,
+            ]);
+        };
+
         $action = $route['action'];
 
-        if ('Closure' === $action) {
-            return $route;
-        }
-
-        if (false === strpos($action, '@')) {
-            return $route;
+        if ('Closure' === $action || false === strpos($action, '@')) {
+            return $build_array(null, [], []);
         }
 
         list($class, $method) = explode('@', $action);
@@ -85,11 +119,7 @@ class GenerateDocsConsole extends Command
         $ref_class = new \ReflectionClass($class);
         $parser = new PhpDocParser($ref_class->getMethod($method));
 
-        return array_merge($route, [
-            'description' => $parser->getDescription(),
-            'throws' => $parser->getThrows(),
-            'params' => $parser->getParams(),
-        ]);
+        return $build_array($parser->getDescription(), $parser->getThrows(), $parser->getParams());
     }
 
     /**
@@ -132,7 +162,7 @@ class GenerateDocsConsole extends Command
      */
     protected function filterRoute(array $route)
     {
-        if (!str_contains($route['uri'], 'api')) {
+        if (!str_contains($route['uri'], $this->config['prefix'])) {
             return;
         }
 
