@@ -67,8 +67,8 @@ class PhpDocParser
      */
     public function getParams()
     {
-        $lines_docs = array_filter($this->getParsedDocs(), function($item) {
-           return preg_match('/^@param/i', $item);
+        $lines_docs = array_filter($this->getParsedDocs(), function ($item) {
+            return preg_match('/^@param/i', $item);
         });
 
         $params = [];
