@@ -1,33 +1,34 @@
 {
-    "name": "pomek/path2api",
-    "description": "",
-    "authors": [
-        {
-            "name": "Kamil Piechaczek",
-            "email": "github@pomek.pl"
-        }
-    ],
-    "config": {
-        "bin-dir": "bin"
-    },
-    "autoload": {
-        "psr-4": {
-            "Pomek\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Stubs\\Pomek\\": "stubs"
-        }
-    },
-    "require": {
-        "illuminate/support": "~5.0",
-        "illuminate/console": "~5.0",
-        "illuminate/routing": "~5.0",
-        "illuminate/filesystem": "~5.0"
-    },
-    "require-dev": {
-        "phpspec/phpspec": "~2.0",
-        "illuminate/events": "~5.0"
+  "name": "pomek/path2api",
+  "description": "Path2API is a simple Laravel package which allows you generate API documentation based on phpDoc comments in your classes.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kamil Piechaczek",
+      "email": "github@pomek.pl"
     }
+  ],
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pomek\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Stubs\\Pomek\\": "stubs"
+    }
+  },
+  "require": {
+    "illuminate/support": "~5.0",
+    "illuminate/console": "~5.0",
+    "illuminate/routing": "~5.0",
+    "illuminate/filesystem": "~5.0"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "~2.0",
+    "illuminate/events": "~5.0"
+  }
 }
