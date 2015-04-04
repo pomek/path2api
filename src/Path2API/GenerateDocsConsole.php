@@ -54,7 +54,42 @@ class GenerateDocsConsole extends Command
             return;
         }
 
-        $this->getRoutes();
+
+    }
+
+    public function getRoutesWithDocs()
+    {
+        $results = [];
+
+        foreach ($this->getRoutes() as $route) {
+            $results[] = $this->parseRoute($route);
+        }
+
+        return $results;
+    }
+
+    protected function parseRoute(array $route)
+    {
+        $action = $route['action'];
+
+        if ('Closure' === $action) {
+            return $route;
+        }
+
+        if (false === strpos($action, '@')) {
+            return $route;
+        }
+
+        list($class, $method) = explode('@', $action);
+
+        $ref_class = new \ReflectionClass($class);
+        $parser = new PhpDocParser($ref_class->getMethod($method));
+
+        return array_merge($route, [
+            'description' => $parser->getDescription(),
+            'throws' => $parser->getThrows(),
+            'params' => $parser->getParams(),
+        ]);
     }
 
     /**

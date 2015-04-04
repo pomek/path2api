@@ -2,17 +2,15 @@
 
 namespace Pomek\Path2API;
 
-use Pomek\Path2API\Contract\ReflectionMethodInterface;
-
 class PhpDocParser
 {
 
     /**
-     * @var ReflectionMethodInterface
+     * @var \ReflectionMethod
      */
     protected $reflection;
 
-    public function __construct(ReflectionMethodInterface $reflection)
+    public function __construct(\ReflectionMethod $reflection)
     {
         $this->reflection = $reflection;
     }

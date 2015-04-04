@@ -4,11 +4,10 @@ namespace spec\Pomek\Path2API;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Pomek\Path2API\Contract\ReflectionMethodInterface;
 
 class PhpDocParserSpec extends ObjectBehavior
 {
-    function let(ReflectionMethodInterface $reflection)
+    function let(\ReflectionMethod $reflection)
     {
         $this->beConstructedWith($reflection);
     }
@@ -18,7 +17,7 @@ class PhpDocParserSpec extends ObjectBehavior
         $this->shouldHaveType('Pomek\Path2API\PhpDocParser');
     }
 
-    function it_should_return_throws_list_from_phpdoc(ReflectionMethodInterface $reflection)
+    function it_should_return_throws_list_from_phpdoc(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -35,7 +34,7 @@ DOCBLOCK;
         ]);
     }
 
-    function it_should_return_empty_array_from_phpdoc(ReflectionMethodInterface $reflection)
+    function it_should_return_empty_array_from_phpdoc(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -48,7 +47,7 @@ DOCBLOCK;
         $this->getThrows()->shouldReturn([]);
     }
 
-    function it_should_return_description_of_method_from_one_line_of_phpdoc(ReflectionMethodInterface $reflection)
+    function it_should_return_description_of_method_from_one_line_of_phpdoc(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -61,7 +60,7 @@ DOCBLOCK;
         $this->getDescription()->shouldReturn("It's a simple one line description.");
     }
 
-    function it_should_return_description_of_method_from_two_lines_of_phpdoc(ReflectionMethodInterface $reflection)
+    function it_should_return_description_of_method_from_two_lines_of_phpdoc(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -78,7 +77,7 @@ DOCBLOCK;
         ]));
     }
 
-    function it_should_return_description_of_method_from_three_lines_of_phpdoc(ReflectionMethodInterface $reflection)
+    function it_should_return_description_of_method_from_three_lines_of_phpdoc(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -97,7 +96,7 @@ DOCBLOCK;
         ]));
     }
 
-    function it_should_return_null_when_description_is_empty(ReflectionMethodInterface $reflection)
+    function it_should_return_null_when_description_is_empty(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -110,7 +109,7 @@ DOCBLOCK;
         $this->getDescription()->shouldReturn("");
     }
 
-    function it_should_return_params_with_types_hinting(ReflectionMethodInterface $reflection)
+    function it_should_return_params_with_types_hinting(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -135,7 +134,7 @@ DOCBLOCK;
         ]);
     }
 
-    function it_should_return_params_without_types_hinting(ReflectionMethodInterface $reflection)
+    function it_should_return_params_without_types_hinting(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -160,7 +159,7 @@ DOCBLOCK;
         ]);
     }
 
-    function it_should_return_params_with_object_types_hinting(ReflectionMethodInterface $reflection)
+    function it_should_return_params_with_object_types_hinting(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**
@@ -186,7 +185,7 @@ DOCBLOCK;
         ]);
     }
 
-    function it_should_return_parsed_php_doc_elements(ReflectionMethodInterface $reflection)
+    function it_should_return_parsed_php_doc_elements(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK
 /**

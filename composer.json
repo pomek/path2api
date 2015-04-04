@@ -18,6 +18,11 @@
             "Pomek\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Stubs\\Pomek\\": "stubs"
+        }
+    },
     "require": {
         "illuminate/support": "~5.0",
         "illuminate/console": "~5.0",
