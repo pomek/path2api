@@ -185,6 +185,32 @@ DOCBLOCK;
         ]);
     }
 
+    function it_should_return_params_with_object_types_hinting_based_on_property_field(\ReflectionMethod $reflection)
+    {
+        $docblock = <<<DOCBLOCK
+/**
+ * @property stdClass \$userId
+ * @property Integer | Float \$categoryId
+ * @property Collection \$word
+ */
+DOCBLOCK;
+
+        $reflection->getDocComment()->willReturn($docblock);
+
+        $this->getParams()->shouldReturn([
+            '$userId' => [
+                'stdClass'
+            ],
+            '$categoryId' => [
+                'Integer',
+                'Float'
+            ],
+            '$word' => [
+                'Collection'
+            ],
+        ]);
+    }
+
     function it_should_return_parsed_php_doc_elements(\ReflectionMethod $reflection)
     {
         $docblock = <<<DOCBLOCK

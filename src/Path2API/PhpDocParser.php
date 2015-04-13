@@ -68,13 +68,13 @@ class PhpDocParser
     public function getParams()
     {
         $lines_docs = array_filter($this->getParsedDocs(), function ($item) {
-            return preg_match('/^@param/i', $item);
+            return preg_match('/^@(param|property)/i', $item);
         });
 
         $params = [];
 
         $lines_docs = array_map(function ($item) {
-            return preg_replace('/^@param (.*)/i', '$1', $item);
+            return preg_replace('/^@(param|property) (.*)/i', '$2', $item);
         }, $lines_docs);
 
         foreach ($lines_docs as $item) {
