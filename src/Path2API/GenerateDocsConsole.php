@@ -91,7 +91,7 @@ class GenerateDocsConsole extends Command
             $route = $this->parseRoute($route);
             $template = $this->config['template'];
 
-            $content[] = $template($route['uri'], $route['description'], $route['params'], $route['throws']);
+            $content[] = $template($route['uri'], $route['description'], $route['methods'], $route['params'], $route['throws']);
         }
 
         $content[] = $this->config['after'];
@@ -157,7 +157,7 @@ class GenerateDocsConsole extends Command
     {
         return $this->filterRoute([
             'uri' => $route->uri(),
-            'method' => $route->methods(),
+            'methods' => $route->methods(),
             'name' => $route->getName(),
             'action' => $route->getActionName(),
         ]);

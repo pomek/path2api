@@ -21,16 +21,16 @@ class PhpDocParserSpec extends ObjectBehavior
     {
         $docblock = <<<DOCBLOCK
 /**
- * @throws \Exception | \LogicException | \PDOException
+ * @throws Exception | LogicException | PDOException
  */
 DOCBLOCK;
 
         $reflection->getDocComment()->willReturn($docblock);
 
         $this->getThrows()->shouldReturn([
-            '\Exception',
-            '\LogicException',
-            '\PDOException'
+            'Exception',
+            'LogicException',
+            'PDOException'
         ]);
     }
 
@@ -225,7 +225,7 @@ DOCBLOCK;
  * @param int \$userId
  * @param int \$categoryId
  * @param string \$word
- * @throws \InvalidArgumentException|\LogicException
+ * @throws InvalidArgumentException|LogicException
  */
 DOCBLOCK;
 
@@ -253,8 +253,8 @@ DOCBLOCK;
         ]);
 
         $this->getThrows()->shouldReturn([
-            '\InvalidArgumentException',
-            '\LogicException',
+            'InvalidArgumentException',
+            'LogicException',
         ]);
     }
 
@@ -267,7 +267,7 @@ DOCBLOCK;
  * @param  array   \$parameters
  * @return mixed
  *
- * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+ * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException
  */
 DOCBLOCK;
 
@@ -282,7 +282,7 @@ DOCBLOCK;
         ]);
 
         $this->getThrows()->shouldReturn([
-            '\Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
         ]);
     }
 

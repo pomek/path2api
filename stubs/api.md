@@ -4,12 +4,12 @@ Documentation generates by **Path2API** package.
 
 ---
 
-### URL: api
+### `GET`: api
 
 It's a simple controller.
 
 
-### URL: api/contact/{email}
+### `POST`: api/contact/{email}
 
 Sending email message to given email address.
 @see: mail() function
@@ -18,10 +18,10 @@ Sending email message to given email address.
  * `string` `$email`
 
 **Throws:**
- * `\InvalidArgumentException`
+ * `InvalidArgumentException`
 
 
-### URL: api/test/{id}
+### `GET|POST`: api/test/{id}
 
 
 

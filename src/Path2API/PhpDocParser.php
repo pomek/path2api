@@ -30,7 +30,7 @@ class PhpDocParser
         }
 
         return array_map(function ($item) {
-            return trim($item);
+            return trim($item, ' \\');
         }, explode('|', $matches[1]));
     }
 

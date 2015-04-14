@@ -36,9 +36,19 @@ return [
     /**
      * Template for a single route.
      */
-    'template' => function ($uri, $description, array $params, array $throws) {
+    'template' => function ($uri, $description, array $methods, array $params, array $throws) {
+        // To upper each HTTP method
+        $methods = array_map(function ($item) {
+            return strtoupper($item);
+        }, $methods);
+
+        // Remove HTTP "HEAD" if exist
+        $methods = array_filter($methods, function ($item) {
+            return $item !== "HEAD";
+        });
+
         $response = [
-            sprintf('### URL: %s' . "\n", $uri),
+            sprintf('### `%s`: %s' . "\n", join('|', $methods), $uri),
         ];
 
         if (null !== $description) {

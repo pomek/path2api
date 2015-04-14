@@ -44,7 +44,7 @@ class GenerateDocsConsoleSpec extends ObjectBehavior
             [
                 'action' => 'Stubs\Pomek\Path2API\Controller@homepage',
                 'description' => 'It\'s a simple controller.',
-                'method' => ['GET', 'HEAD'],
+                'methods' => ['GET', 'HEAD'],
                 'params' => [],
                 'throws' => [],
                 'uri' => 'api',
@@ -56,18 +56,18 @@ class GenerateDocsConsoleSpec extends ObjectBehavior
                     'Sending email message to given email address.',
                     '@see: mail() function',
                 ]),
-                'method' => ['POST'],
+                'methods' => ['POST'],
                 'params' => [
                     '$email' => ['string']
                 ],
-                'throws' => ['\InvalidArgumentException'],
+                'throws' => ['InvalidArgumentException'],
                 'uri' => 'api/contact/{email}',
                 'name' => null,
             ],
             [
                 'action' => 'Closure',
                 'description' => null,
-                'method' => ['GET', 'POST', 'HEAD'],
+                'methods' => ['GET', 'POST', 'HEAD'],
                 'params' => [],
                 'throws' => [],
                 'uri' => 'api/test/{id}',
